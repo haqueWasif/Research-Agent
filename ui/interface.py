@@ -179,7 +179,7 @@ class UIInterface:
         """
         pdf_bytes = markdown_to_pdf(research_content)
         st.download_button(
-            label="📥 Download as Text File",
+            label="📥 Download as MD File",
             data=research_content,
             file_name=f"research_content.md",
             mime="text/markdown",
