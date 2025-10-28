@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import streamlit as st
 import os
 import subprocess
-import pandoc
+import pypandoc
 
 os.environ["PATH"] += os.pathsep + r"C:\Program Files\Pandoc"
 
@@ -64,7 +64,7 @@ import subprocess
 
 def markdown_to_pdf(markdown_text):
     process = subprocess.Popen(
-        ["pandoc", "-f", "markdown", "-t", "pdf", "-o", "-"],
+        ["ppyandoc", "-f", "markdown", "-t", "pdf", "-o", "-"],
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
