@@ -177,25 +177,28 @@ class UIInterface:
         Args:
             research_content: Content to download
         """
-        pdf_bytes = markdown_to_pdf(research_content)
+
         st.download_button(
             label="📥 Download as MD",
             data=research_content,
             file_name=f"research_content.md",
             mime="text/markdown",
-            key="download_btn",
+            key="download_btn_1",
             use_container_width=True
         )
         
         st.markdown("### Export Options")
     
         pdf_bytes = markdown_to_pdf(research_content)
+        
         if pdf_bytes:
             st.download_button(
                 label="📄 Download as PDF",
                 data=pdf_bytes,
                 file_name=f"research_content.pdf",
-                mime='application/pdf'
+                mime='application/pdf',
+                key="download_btn_2",
+                use_container_width=True
             )
     
     
