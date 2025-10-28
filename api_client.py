@@ -40,7 +40,8 @@ class OpenRouterClient:
                         "role": "user",
                         "content": prompt
                     }
-                ]
+                ],
+                max_tokens=100000
             )
             return completion.choices[0].message.content
         except Exception as e:
