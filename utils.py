@@ -4,6 +4,7 @@ Utility functions for the Research Tool
 
 import regex as re
 from dotenv import load_dotenv
+import streamlit as st
 import os
 
 
@@ -27,18 +28,16 @@ def load_environment():
 
 
 def get_api_key() -> str:
-    """
-    Get API key from environment
+    # Try Streamlit secrets first (production)
+    try:
+        return st.secrets["OPENROUTER_API_KEY"]
+    except (KeyError, FileNotFoundError):
+        pass
     
-    Returns:
-        API key string
-        
-    Raises:
-        ValueError: If API key not found
-    """
+    # Fall back to environment variable (local development)
     api_key = os.getenv("OPENROUTER_API_KEY")
     if not api_key:
-        raise ValueError("OPENROUTER_API_KEY not found in environment variables")
+        raise ValueError("OPENROUTER_API_KEY not found")
     return api_key
 
 
