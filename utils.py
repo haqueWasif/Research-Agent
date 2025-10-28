@@ -64,7 +64,7 @@ import subprocess
 
 def markdown_to_pdf(markdown_text):
     process = subprocess.Popen(
-        ["ppyandoc", "-f", "markdown", "-t", "pdf", "-o", "-"],
+        ["pandoc", "-f", "markdown", "-t", "pdf", "-o", "-"],
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
