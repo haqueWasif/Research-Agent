@@ -62,18 +62,23 @@ def truncate_text(text: str, max_length: int = 20) -> str:
 
 import subprocess
 
-def markdown_to_pdf(markdown_text):
-    process = subprocess.Popen(
-        ["pandoc", "-f", "markdown", "-t", "pdf", "-o", "-"],
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
-    pdf_bytes, error = process.communicate(input=markdown_text.encode("utf-8"))
+def markdown_to_pdf(markdown_text, output_file="output.pdf"):
+    """
+    Convert Markdown text to a PDF file.
 
-    if process.returncode != 0:
-        raise RuntimeError(f"Pandoc failed: {error.decode()}")
+    Args:
+        markdown_text (str): The Markdown content to convert.
+        output_file (str): Path to the output PDF file.
 
-    return pdf_bytes
-
+    Returns:
+        str: Path to the generated PDF file.
+    """
+    try:
+        # Convert Markdown to PDF
+        pypandoc.convert_text(markdown_text, 'pdf', format='md', outputfile=output_file)
+        return output_file
+    except OSError as e:
+        raise RuntimeError(f"Pandoc or LaTeX not found: {e}")
+    except Exception as e:
+        raise RuntimeError(f"Failed to generate PDF: {e}")
 
