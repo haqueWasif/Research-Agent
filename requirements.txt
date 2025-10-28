@@ -9,6 +9,10 @@ regex>=2023.0.0
 colorama>=0.4.6  # For colored terminal output
 requests>=2.31.0  # For HTTP requests if needed
 
+pypandoc>=1.11
+
+
+
 # Development Dependencies (Optional)
 # Uncomment if you're developing or contributing
 # pytest>=7.4.0  # For unit testing

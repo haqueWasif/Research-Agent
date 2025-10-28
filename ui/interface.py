@@ -5,7 +5,7 @@ Streamlit UI components and interface
 import streamlit as st
 from config import Config
 from data_models import UserInput
-
+from utils import markdown_to_pdf
 
 class UIInterface:
     """Handle Streamlit UI rendering"""
@@ -177,11 +177,25 @@ class UIInterface:
         Args:
             research_content: Content to download
         """
+        pdf_bytes = markdown_to_pdf(research_content)
         st.download_button(
             label="📥 Download as Text File",
             data=research_content,
-            file_name="research_output.txt",
-            mime="text/plain",
+            file_name=f"research_content.md",
+            mime="text/markdown",
             key="download_btn",
             use_container_width=True
         )
+        
+        st.markdown("### Export Options")
+    
+        pdf_bytes = markdown_to_pdf(research_content)
+        if pdf_bytes:
+            st.download_button(
+                label="📄 Download as PDF",
+                data=pdf_bytes,
+                file_name=f"research_content.pdf",
+                mime='application/pdf'
+            )
+    
+    

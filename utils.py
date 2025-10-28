@@ -6,6 +6,8 @@ import regex as re
 from dotenv import load_dotenv
 import streamlit as st
 import os
+import subprocess
+import pandoc
 
 
 def remove_think_tags(text: str) -> str:
@@ -55,3 +57,23 @@ def truncate_text(text: str, max_length: int = 20) -> str:
     if len(text) > max_length:
         return text[:max_length] + "..."
     return text
+
+def markdown_to_pdf(markdown_text):
+    """Convert markdown string to PDF using pandoc."""
+    try:
+        process = subprocess.Popen(
+            ["pandoc", "-f", "markdown", "-t", "pdf"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        pdf_bytes, error = process.communicate(input=markdown_text.encode('utf-8'))
+        
+        if process.returncode != 0:
+            st.error(f"PDF conversion failed: {error.decode()}")
+            return None
+        
+        return pdf_bytes
+    except FileNotFoundError:
+        st.error("Pandoc not installed: https://pandoc.org/installing.html")
+        return None
