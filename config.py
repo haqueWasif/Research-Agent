@@ -1,0 +1,47 @@
+"""
+Configuration settings for the Research Tool
+"""
+
+class Config:
+    """Application configuration"""
+    # API Configuration
+    OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+    MODEL_NAME = "minimax/minimax-m2:free"
+    
+    # Templates
+    TEMPLATE_PATH = "template.json"
+    
+    # UI Configuration
+    PAGE_TITLE = "Research Tool"
+    PAGE_ICON = "📚"
+    LAYOUT = "wide"
+    
+    # Paper format options
+    PAPER_FORMATS = [
+        'Research Paper',
+        'Essay',
+        'Blog Post',
+        'Technical Report',
+        'Literature Review',
+        'Case Study',
+        'White Paper'
+    ]
+    
+    # Writing style options
+    WRITING_STYLES = [
+        'Academic',
+        'Professional',
+        'Conversational',
+        'Technical',
+        'Persuasive',
+        'Analytical',
+        'Descriptive'
+    ]
+    
+    # Length options
+    LENGTH_OPTIONS = [
+        'Short (500 words)',
+        'Medium (1000 words)',
+        'Long (2000 words)',
+        'Very Long (3000+ words)'
+    ]
