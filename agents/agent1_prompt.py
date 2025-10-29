@@ -22,13 +22,17 @@ class PromptEngineeringAgent(BaseAgent):
         """
         # Create an instruction for the LLM about what type of prompt we want.
         system_instruction = (
-            "Given the research goal below and constraints, generate an optimized, detailed prompt that will help another advanced AI agent produce the required research content.\n"
+            "Given the research goal below and constraints, generate an optimized, detailed prompt "
+            "that will help another advanced AI agent produce the required research content.\n"
             f"Paper Format: {user_input.paper_format}\n"
             f"Writing Style: {user_input.writing_style}\n"
             f"Length: {user_input.length}\n"
             f"Topic or Query: {user_input.topic}\n\n"
-            "Be specific about output requirements and constraints, avoiding ambiguity. The prompt you create should guide an AI to produce a high-quality output."
+            "IMPORTANT: Ensure that all math formulas in the generated research content "
+            "are formatted using LaTeX syntax. Use $...$ for inline math and $$...$$ for display math. "
+            "Do not convert formulas to Unicode symbols. Provide clean LaTeX-ready output."
         )
+
 
         try:    
             prompt_response = self.api_client.generate_completion(system_instruction)
