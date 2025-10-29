@@ -62,63 +62,54 @@ def truncate_text(text: str, max_length: int = 20) -> str:
         return text[:max_length] + "..."
     return text
 
-def markdown_to_pdf(markdown_text):
+def markdown_to_pdf(markdown_text: str) -> bytes | None:
     """
-    Convert Markdown text to a PDF (Unicode-safe for Streamlit deployment).
-    Handles Greek, Chinese, and special characters without font errors.
-    Returns PDF bytes for Streamlit download buttons.
+    Convert Markdown text to a PDF for Streamlit deployment.
+    Handles Greek, Chinese, and math symbols using a Unicode-safe font.
+    
+    Returns:
+        PDF file bytes, or None if conversion failed.
     """
     import tempfile
     import pypandoc
     import os
 
+    # Pick a single Unicode-safe font known to exist on Streamlit Cloud
+    unicode_font = "Noto Serif"
+
     tmp_file = None
     try:
+        # Create temporary PDF file
         tmp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
         pdf_path = tmp_file.name
-        tmp_file.close()
+        tmp_file.close()  # close so Pandoc can write
 
-        # Use a Unicode-safe font (widely available on Streamlit Cloud)
-        fonts_to_try = [
-            "Noto Serif CJK SC",
-            "Noto Serif",
-            "Liberation Serif",
-            "Arial Unicode MS",
-            "Times New Roman"
-        ]
+        # Convert Markdown -> PDF
+        pypandoc.convert_text(
+            markdown_text,
+            to="pdf",
+            format="md",
+            outputfile=pdf_path,
+            extra_args=[
+                "--pdf-engine=xelatex",
+                "-V", f"mainfont={unicode_font}",
+                "-V", f"mathfont={unicode_font}"
+            ]
+        )
 
-        success = False
-        for font in fonts_to_try:
-            try:
-                pypandoc.convert_text(
-                    markdown_text,
-                    to="pdf",
-                    format="md",
-                    outputfile=pdf_path,
-                    extra_args=[
-                        "--pdf-engine=xelatex",
-                        "-V", f"mainfont={font}",
-                        "-V", f"mathfont={font}",
-                    ]
-                )
-                success = True
-                break
-            except Exception as e:
-                continue
-
-        if not success:
-            raise RuntimeError("No suitable font found for PDF generation")
-
-        # Read back PDF bytes
+        # Read PDF bytes
         with open(pdf_path, "rb") as f:
             pdf_bytes = f.read()
 
         return pdf_bytes
 
     except Exception as e:
+        # Print full exception for debugging
         print(f"[PDF Generation Error] {e}")
+        print("➡️ Ensure that .streamlit/packages.sh installs XeLaTeX and texlive fonts")
         return None
 
     finally:
+        # Clean up temporary file
         if tmp_file and os.path.exists(pdf_path):
             os.remove(pdf_path)
