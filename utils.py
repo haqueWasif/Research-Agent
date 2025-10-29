@@ -8,6 +8,8 @@ import streamlit as st
 import os
 import subprocess
 import pypandoc
+import tempfile
+
 
 os.environ["PATH"] += os.pathsep + r"C:\Program Files\Pandoc"
 
@@ -60,25 +62,20 @@ def truncate_text(text: str, max_length: int = 20) -> str:
         return text[:max_length] + "..."
     return text
 
-import subprocess
-
-def markdown_to_pdf(markdown_text, output_file="output.pdf"):
-    """
-    Convert Markdown text to a PDF file.
-
-    Args:
-        markdown_text (str): The Markdown content to convert.
-        output_file (str): Path to the output PDF file.
-
-    Returns:
-        str: Path to the generated PDF file.
-    """
+def markdown_to_pdf(markdown_text):
     try:
-        # Convert Markdown to PDF
-        pypandoc.convert_text(markdown_text, 'pdf', format='md', outputfile=output_file)
-        return output_file
-    except OSError as e:
-        raise RuntimeError(f"Pandoc or LaTeX not found: {e}")
+        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp_file:
+            pypandoc.convert_text(
+                markdown_text,
+                'pdf',
+                format='md',
+                outputfile=tmp_file.name,
+                extra_args=['--pdf-engine=xelatex']
+            )
+            tmp_file.seek(0)
+            pdf_bytes = tmp_file.read()
+        return pdf_bytes
     except Exception as e:
-        raise RuntimeError(f"Failed to generate PDF: {e}")
+        print(f"PDF generation failed: {e}")
+        return None
 

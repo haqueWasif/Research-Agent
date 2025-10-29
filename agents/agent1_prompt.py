@@ -22,15 +22,21 @@ class PromptEngineeringAgent(BaseAgent):
         """
         # Create an instruction for the LLM about what type of prompt we want.
         system_instruction = (
-            "Given the research goal below and constraints, generate an optimized, detailed prompt "
-            "that will help another advanced AI agent produce the required research content.\n"
+            "Given the research goal and constraints below, generate an optimized, detailed prompt "
+            "that will guide another advanced AI agent to produce high-quality research content.\n"
             f"Paper Format: {user_input.paper_format}\n"
             f"Writing Style: {user_input.writing_style}\n"
             f"Length: {user_input.length}\n"
             f"Topic or Query: {user_input.topic}\n\n"
-            "IMPORTANT: Ensure that all math formulas in the generated research content "
-            "are formatted using LaTeX syntax. Use $...$ for inline math and $$...$$ for display math. "
-            "Do not convert formulas to Unicode symbols. Provide clean LaTeX-ready output."
+            "IMPORTANT:\n"
+            "1. All math formulas in the research content must use LaTeX syntax.\n"
+            "   - Inline math: $...$\n"
+            "   - Display math: $$...$$\n"
+            "2. Do not convert formulas to Unicode symbols.\n"
+            "3. Ensure the output is clean, Markdown-ready, and ready to render in PDFs.\n"
+            "4. Provide detailed explanations, equations, and properly formatted LaTeX where applicable.\n\n"
+            "The prompt you create should guide an AI to produce a final output that can be directly converted "
+            "to PDF with proper LaTeX rendering."
         )
 
 
