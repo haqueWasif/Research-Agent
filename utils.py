@@ -82,7 +82,9 @@ def markdown_to_pdf(markdown_text):
             extra_args=[
                 '--pdf-engine=xelatex',
                 '-V', 'mainfont=DejaVuSerif',
-                '-V', 'mathfont=Latin Modern Math'
+                '-V', 'mathfont=Latin Modern Math',
+                '-V', 'mainfont=LibertinusSerif', 
+                '-V', 'mathfont=LibertinusMath'
             ]
         )
 
