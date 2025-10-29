@@ -5,4 +5,5 @@ apt-get install -y \
     texlive-fonts-recommended \
     texlive-fonts-extra \
     texlive-latex-extra \
-    fonts-libertinus
+    fonts-libertinus \
+    texlive-lang-cjk
