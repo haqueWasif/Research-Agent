@@ -63,19 +63,33 @@ def truncate_text(text: str, max_length: int = 20) -> str:
     return text
 
 def markdown_to_pdf(markdown_text):
+    """
+    Convert Markdown text to PDF and return its bytes.
+    Handles Unicode characters like Greek letters (λ, α, etc.).
+    """
     try:
+        # Create a temporary PDF file path
         with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp_file:
-            pypandoc.convert_text(
-                markdown_text,
-                'pdf',
-                format='md',
-                outputfile=tmp_file.name,
-                extra_args=['--pdf-engine=xelatex']
-            )
-            tmp_file.seek(0)
-            pdf_bytes = tmp_file.read()
+            pdf_path = tmp_file.name
+
+        # Convert Markdown -> PDF using XeLaTeX and DejaVuSerif
+        pypandoc.convert_text(
+            markdown_text,
+            to='pdf',
+            format='md',
+            outputfile=pdf_path,
+            extra_args=['--pdf-engine=xelatex', '-V', 'mainfont=DejaVuSerif']
+        )
+
+        # Read the PDF bytes
+        with open(pdf_path, "rb") as f:
+            pdf_bytes = f.read()
+
+        # Clean up the temporary file
+        os.remove(pdf_path)
+
         return pdf_bytes
+
     except Exception as e:
         print(f"PDF generation failed: {e}")
         return None
-
