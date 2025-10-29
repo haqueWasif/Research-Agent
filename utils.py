@@ -81,6 +81,8 @@ def markdown_to_pdf(markdown_text):
             extra_args=['--pdf-engine=xelatex', '-V', 'mainfont=DejaVuSerif', '-V', 'mainfont=Latin Modern Math', '-V', 'mathfont=Latin Modern Math']
         )
 
+        pdf_bytes = None
+        
         # Read the PDF bytes
         with open(pdf_path, "rb") as f:
             pdf_bytes = f.read()
