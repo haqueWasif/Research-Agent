@@ -191,14 +191,11 @@ class UIInterface:
     
         pdf_bytes = markdown_to_pdf(research_content)
 
-        if pdf_bytes:
-            st.download_button(
+        st.download_button(
                 label="📄 Download as PDF",
                 data=pdf_bytes,
                 file_name="research_content.pdf",
                 mime="application/pdf"
-            )
-        else:
-            st.warning("PDF generation failed. Check LaTeX formulas and fonts.")
+        )
             
     
