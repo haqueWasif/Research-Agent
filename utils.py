@@ -64,32 +64,53 @@ def truncate_text(text: str, max_length: int = 20) -> str:
 
 def markdown_to_pdf(markdown_text):
     """
-    Convert Markdown text to PDF and return its bytes.
+    Convert Markdown text to a PDF (Unicode-safe for Streamlit deployment).
+    Handles Greek, Chinese, and special characters without font errors.
+    Returns PDF bytes for Streamlit download buttons.
     """
+    import tempfile
+    import pypandoc
+    import os
+
     tmp_file = None
     try:
-        # Create a temporary PDF file
         tmp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
         pdf_path = tmp_file.name
-        tmp_file.close()  # close so pandoc can write to it
+        tmp_file.close()
 
-        # Convert Markdown -> PDF
-        pypandoc.convert_text(
-            markdown_text,
-            to='pdf',
-            format='md',
-            outputfile=pdf_path,
-            extra_args=[
-                '--pdf-engine=xelatex',
-                '-V', 'mainfont=DejaVuSerif',
-                '-V', 'mathfont=Latin Modern Math',
-                '-V', 'mainfont=LibertinusSerif', 
-                '-V', 'mathfont=LibertinusMath'
-            ]
-        )
+        # Use a Unicode-safe font (widely available on Streamlit Cloud)
+        fonts_to_try = [
+            "Noto Serif CJK SC",
+            "Noto Serif",
+            "Liberation Serif",
+            "Arial Unicode MS",
+            "Times New Roman"
+        ]
 
-        # Read PDF bytes
-        with open(pdf_path, 'rb') as f:
+        success = False
+        for font in fonts_to_try:
+            try:
+                pypandoc.convert_text(
+                    markdown_text,
+                    to="pdf",
+                    format="md",
+                    outputfile=pdf_path,
+                    extra_args=[
+                        "--pdf-engine=xelatex",
+                        "-V", f"mainfont={font}",
+                        "-V", f"mathfont={font}",
+                    ]
+                )
+                success = True
+                break
+            except Exception as e:
+                continue
+
+        if not success:
+            raise RuntimeError("No suitable font found for PDF generation")
+
+        # Read back PDF bytes
+        with open(pdf_path, "rb") as f:
             pdf_bytes = f.read()
 
         return pdf_bytes
