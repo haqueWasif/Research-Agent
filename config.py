@@ -45,3 +45,13 @@ class Config:
         'Long (2000 words)',
         'Very Long (3000+ words)'
     ]
+
+    # Chatbot Settings
+    CHATBOT_MODEL = "minimax/minimax-m2:free"  # Same as Research-Agent
+    CHATBOT_TEMPERATURE = 0.7
+    CHATBOT_MAX_HISTORY = 20  # Max messages to keep in session
+    
+    # Floating Widget Settings
+    CHATBOT_BUTTON_SIZE = 60  # pixels
+    CHATBOT_WINDOW_WIDTH = 380  # pixels
+    CHATBOT_WINDOW_HEIGHT = 600  # pixels

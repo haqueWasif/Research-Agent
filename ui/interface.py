@@ -197,5 +197,22 @@ class UIInterface:
                 file_name="research_content.pdf",
                 mime="application/pdf"
         )
+        
+        
+        st.markdown(
+        """
+        <style>
+        .bottom-right-logo {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 80px;  /* Adjust the width of the logo */
+            z-index: 9999; /* Ensures it stays on top of other content */
+        }
+        </style>
+        <img class="bottom-right-logo" src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/bcdeaf163021985.63df4524e42bb.jpg" alt="logo">
+        """,
+        unsafe_allow_html=True
+    )
             
     

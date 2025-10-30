@@ -1,20 +1,26 @@
 # Core Dependencies
+langchain>=0.2.0
+langchain-core>=0.2.0
+langchain-openai>=0.1.0
 streamlit>=1.28.0
+python-dotenv>=1.0.0
 openai>=1.0.0
-langchain-core>=0.1.0
 python-dotenv>=1.0.0
 regex>=2023.0.0
 
-# Optional but Recommended
+
+
+
+# Optional
 colorama>=0.4.6  # For colored terminal output
-requests>=2.31.0  # For HTTP requests if needed
+requests>=2.31.0 
 
 pypandoc>=1.11
 
 
 
+
 # Development Dependencies (Optional)
-# Uncomment if you're developing or contributing
 # pytest>=7.4.0  # For unit testing
 # black>=23.0.0  # For code formatting
 # flake8>=6.0.0  # For code linting
