@@ -38,7 +38,25 @@ class UIInterface:
     @staticmethod
     def render_header():
         """Render application header"""
-        st.title("📚 Research Content Generator")
+        import os
+        
+        col1, col2 = st.columns([1, 5])
+        
+        # Display logo
+        with col1:
+            logo_path = "static/page_logo.png"
+            if os.path.exists(logo_path):
+                st.image(logo_path, width=1000)
+            else:
+                st.markdown("📄")  # Fallback emoji
+        
+        # Display title
+        with col2:
+            st.markdown(
+                "<h1 style='margin-top: 0;'>ScholarMind</h1>",
+                unsafe_allow_html=True
+            )
+        
         st.markdown("Generate high-quality research papers, essays, and reports in seconds")
         st.divider()
     
@@ -50,7 +68,7 @@ class UIInterface:
         Returns:
             UserInput object
         """
-        st.markdown("### Step 1: Tell Us What You Need")
+        st.markdown("### Tell Us What You Need")
         
         col1, col2 = st.columns(2)
         
@@ -78,8 +96,8 @@ class UIInterface:
             )
             
             topic = st.text_area(
-                'Research Topic or Prompt',
-                placeholder="Enter your research topic or question...",
+                'Enter Your Research Focus',
+                placeholder="Your Curiosity Starts Here...",
                 height=100,
                 key="topic"
             )
@@ -100,7 +118,7 @@ class UIInterface:
             True if button clicked, False otherwise
         """
         return st.button(
-            "Generate Research Content",
+            "Generate with ScholarAI",
             key="generate_btn",
             use_container_width=True
         )
@@ -199,20 +217,6 @@ class UIInterface:
         )
         
         
-        st.markdown(
-        """
-        <style>
-        .bottom-right-logo {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            width: 80px;  /* Adjust the width of the logo */
-            z-index: 9999; /* Ensures it stays on top of other content */
-        }
-        </style>
-        <img class="bottom-right-logo" src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/bcdeaf163021985.63df4524e42bb.jpg" alt="logo">
-        """,
-        unsafe_allow_html=True
-    )
+       
             
     

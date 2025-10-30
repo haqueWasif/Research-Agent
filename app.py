@@ -73,12 +73,22 @@ class ResearchToolApp:
         
         with st.sidebar:
             st.markdown("---")
-            st.markdown("### 🤖 Research Assistant")
+            
+            import base64
+            with open("static/logo.png", "rb") as f:
+                img_bytes = f.read()
+                img_base64 = base64.b64encode(img_bytes).decode()
+                
+            st.markdown(
+                f'### <img src="data:image/png;base64,{img_base64}" width="24" height="24"> ScholarBot',
+                unsafe_allow_html=True
+            )
+
             
             messages_container = st.container()
             
             # Get user input
-            user_input = st.chat_input("Ask about your research...")
+            user_input = st.chat_input("What's on your mind?")
             
             # Process message
             if user_input:
