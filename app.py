@@ -119,6 +119,7 @@ class ResearchToolApp:
             # Render messages
             with messages_container:
                 for msg in st.session_state.chat_messages:
+                    st.markdown('---')
                     with st.chat_message(msg["role"]):
                         st.write(msg["content"])
 
