@@ -47,7 +47,7 @@ class Config:
     ]
 
     # Chatbot Settings
-    CHATBOT_MODEL = "minimax/minimax-m2:free"  # Same as Research-Agent
+    CHATBOT_MODEL = "minimax/minimax-m2:free" 
     CHATBOT_TEMPERATURE = 0.7
     CHATBOT_MAX_HISTORY = 20  # Max messages to keep in session
     

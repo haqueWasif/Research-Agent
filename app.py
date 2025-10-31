@@ -71,20 +71,21 @@ class ResearchToolApp:
         if "chat_messages" not in st.session_state:
             st.session_state.chat_messages = []
         
+        sidebar_logo = 'static/logo.png'
+        main_body_logo = 'static/main_logo_body.png'
+
+        st.logo(sidebar_logo, icon_image=None, size='large')
         with st.sidebar:
-            st.markdown("---")
-            
             import base64
             with open("static/logo.png", "rb") as f:
                 img_bytes = f.read()
                 img_base64 = base64.b64encode(img_bytes).decode()
                 
             st.markdown(
-                f'### <img src="data:image/png;base64,{img_base64}" width="24" height="24"> ScholarBot',
+                f''' <div style='position:absolute; margin-top: -40px; margin-left: 35px; width: 100px'> ScholarBot </div> ''',
                 unsafe_allow_html=True
             )
 
-            
             messages_container = st.container()
             
             # Get user input
