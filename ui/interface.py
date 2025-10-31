@@ -6,6 +6,8 @@ import streamlit as st
 from config import Config
 from data_models import UserInput
 from utils import markdown_to_pdf
+import os
+import base64
 
 class UIInterface:
     """Handle Streamlit UI rendering"""
@@ -37,29 +39,58 @@ class UIInterface:
     
     @staticmethod
     def render_header():
-        """Render application header"""
-        import os
+        """Render responsive application header"""
         
-        col1, col2 = st.columns([1, 5])
-        
-        # Display logo
-        with col1:
-            logo_path = "static/page_logo.png"
-            if os.path.exists(logo_path):
-                st.image(logo_path, width=1000)
-            else:
-                st.markdown("📄")  # Fallback emoji
-        
-        # Display title
-        with col2:
-            st.markdown(
-                "<h1 style='margin-top: 0;'>ScholarMind</h1>",
-                unsafe_allow_html=True
-            )
-        
-        st.markdown("Generate high-quality research papers, essays, and reports in seconds")
+
+        logo_path = "static/page_logo.png"
+
+        if os.path.exists(logo_path):
+            with open(logo_path, "rb") as f:
+                logo_b64 = base64.b64encode(f.read()).decode()
+            logo_src = f"data:image/png;base64,{logo_b64}"
+        else:
+            logo_src = ""
+
+        st.markdown(
+            f"""
+            <style>
+                .header-container {{
+                    display: flex;
+                    align-items: left;
+                    justify-content: left;
+                    flex-wrap: wrap;  /* allow stacking on small screens */
+                    text-align: center;
+                    gap: 12px;
+                    margin-bottom: 10px;
+                }}
+                .header-container img {{
+                    max-width: 60px;        /* default logo size */
+                    height: auto;
+                }}
+                @media (max-width: 600px) {{
+                    .header-container img {{
+                        max-width: 40px;    /* smaller logo on mobile */
+                    }}
+                    .header-container h1 {{
+                        font-size: 1.4em;   /* smaller text on mobile */
+                    }}
+                }}
+            </style>
+
+            <div class="header-container">
+                {'<img src="'+logo_src+'" alt="Logo">' if logo_src else '📚'}
+                <h1 style="margin:0;">ScholarMind</h1>
+            </div>
+
+            <p style="font-size:16px; color:gray; margin-top:-5px;">
+                Generate high-quality research papers, essays, and reports in seconds
+            </p>
+            """,
+            unsafe_allow_html=True
+        )
+
         st.divider()
-    
+
     @staticmethod
     def render_input_form() -> UserInput:
         """
