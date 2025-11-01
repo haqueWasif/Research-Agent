@@ -66,27 +66,25 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
     """
     Convert Markdown text to a PDF for Streamlit deployment.
     Handles Greek, Chinese, and math symbols using a Unicode-safe font.
+    
+    Returns:
+        PDF file bytes, or None if conversion failed.
     """
-    
-    import subprocess
-    
-    # Update font cache once per session
-    if "font_cache_updated" not in st.session_state:
-        try:
-            subprocess.run(["fc-cache", "-fv"], check=True, capture_output=True)
-            st.session_state.font_cache_updated = True
-        except Exception as e:
-            print(f"Font cache update failed: {e}")
-    
-    main_font = "DejaVu Serif"  
-    math_font = "DejaVu Sans"
-    
+    import tempfile
+    import pypandoc
+    import os
+
+    # Pick a single Unicode-safe font known to exist on Streamlit Cloud
+    unicode_font = "Noto Serif"
+
     tmp_file = None
     try:
+        # Create temporary PDF file
         tmp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
         pdf_path = tmp_file.name
-        tmp_file.close()
+        tmp_file.close()  # close so Pandoc can write
 
+        # Convert Markdown -> PDF
         pypandoc.convert_text(
             markdown_text,
             to="pdf",
@@ -94,21 +92,24 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
             outputfile=pdf_path,
             extra_args=[
                 "--pdf-engine=xelatex",
-                "-V", f"mainfont={main_font}",
-                "-V", f"mathfont={math_font}"
+                "-V", f"mainfont={unicode_font}",
+                "-V", f"mathfont={unicode_font}"
             ]
         )
 
+        # Read PDF bytes
         with open(pdf_path, "rb") as f:
             pdf_bytes = f.read()
 
         return pdf_bytes
 
     except Exception as e:
+        # Print full exception for debugging
         print(f"[PDF Generation Error] {e}")
+        print("➡️ Ensure that .streamlit/packages.sh installs XeLaTeX and texlive fonts")
         return None
 
     finally:
+        # Clean up temporary file
         if tmp_file and os.path.exists(pdf_path):
             os.remove(pdf_path)
-
