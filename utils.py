@@ -6,6 +6,7 @@ import regex as re
 from dotenv import load_dotenv
 import streamlit as st
 import os
+import subprocess
 import pypandoc
 import tempfile
 
@@ -65,21 +66,27 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
     """
     Convert Markdown text to a PDF for Streamlit deployment.
     Handles Greek, Chinese, and math symbols using a Unicode-safe font.
-    Uses STIX Two Math font to avoid missing character warnings.
     """
     
-    main_font = "LibertinusSerif"  
-    math_font = "LibertinusMath"   
-     
+    import subprocess
+    
+    # Update font cache once per session
+    if "font_cache_updated" not in st.session_state:
+        try:
+            subprocess.run(["fc-cache", "-fv"], check=True, capture_output=True)
+            st.session_state.font_cache_updated = True
+        except Exception as e:
+            print(f"Font cache update failed: {e}")
+    
+    main_font = "Libertinus Serif"  
+    math_font = "Libertinus Math"  
     
     tmp_file = None
     try:
-        # Create temporary PDF file
         tmp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
         pdf_path = tmp_file.name
         tmp_file.close()
 
-        # Convert Markdown -> PDF
         pypandoc.convert_text(
             markdown_text,
             to="pdf",
@@ -92,7 +99,6 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
             ]
         )
 
-        # Read PDF bytes
         with open(pdf_path, "rb") as f:
             pdf_bytes = f.read()
 
@@ -100,10 +106,9 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
 
     except Exception as e:
         print(f"[PDF Generation Error] {e}")
-        print("➡️ Ensure XeLaTeX is installed and texlive-fonts-extra is available.")
         return None
 
     finally:
-        # Clean up temporary file
         if tmp_file and os.path.exists(pdf_path):
             os.remove(pdf_path)
+
