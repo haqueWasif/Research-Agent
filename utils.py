@@ -6,7 +6,6 @@ import regex as re
 from dotenv import load_dotenv
 import streamlit as st
 import os
-import subprocess
 import pypandoc
 import tempfile
 
@@ -66,23 +65,17 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
     """
     Convert Markdown text to a PDF for Streamlit deployment.
     Handles Greek, Chinese, and math symbols using a Unicode-safe font.
-    
-    Returns:
-        PDF file bytes, or None if conversion failed.
     """
-    import tempfile
-    import pypandoc
-    import os
-
-    # Pick a single Unicode-safe font known to exist on Streamlit Cloud
-    unicode_font = "Noto Serif"
+    # Main text font
+    main_font = "Noto Serif"
+    # Math symbols font (supports 𝜇, 𝛴, etc.)
+    math_font = "Noto Math"
 
     tmp_file = None
     try:
-        # Create temporary PDF file
         tmp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
         pdf_path = tmp_file.name
-        tmp_file.close()  # close so Pandoc can write
+        tmp_file.close()
 
         # Convert Markdown -> PDF
         pypandoc.convert_text(
@@ -92,24 +85,21 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
             outputfile=pdf_path,
             extra_args=[
                 "--pdf-engine=xelatex",
-                "-V", f"mainfont={unicode_font}",
-                "-V", f"mathfont={unicode_font}"
+                "-V", f"mainfont={main_font}",
+                "-V", f"mathfont={math_font}"
             ]
         )
 
-        # Read PDF bytes
         with open(pdf_path, "rb") as f:
             pdf_bytes = f.read()
 
         return pdf_bytes
 
     except Exception as e:
-        # Print full exception for debugging
         print(f"[PDF Generation Error] {e}")
-        print("➡️ Ensure that .streamlit/packages.sh installs XeLaTeX and texlive fonts")
+        print("➡️ Make sure XeLaTeX and Noto Math font are installed on your system.")
         return None
 
     finally:
-        # Clean up temporary file
         if tmp_file and os.path.exists(pdf_path):
             os.remove(pdf_path)

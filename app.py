@@ -39,7 +39,7 @@ class ResearchToolApp:
 
     def _get_generated_content_context(self) -> str:
         """Extract context from generated content"""
-        context = "RESEARCH-AGENT APP CONTEXT:\n\n"
+        context = "ScholarMind APP CONTEXT:\n\n"
         
         context += "Available Formats:\n"
         context += "- " + "\n- ".join(Config.PAPER_FORMATS) + "\n\n"
@@ -72,15 +72,9 @@ class ResearchToolApp:
             st.session_state.chat_messages = []
         
         sidebar_logo = 'static/logo.png'
-        main_body_logo = 'static/main_logo_body.png'
 
         st.logo(sidebar_logo, icon_image=None, size='large')
-        with st.sidebar:
-            import base64
-            with open("static/logo.png", "rb") as f:
-                img_bytes = f.read()
-                img_base64 = base64.b64encode(img_bytes).decode()
-                
+        with st.sidebar:        
             st.markdown(
                 f''' <div style='position:absolute; margin-top: -40px; margin-left: 35px; width: 100px'> ScholarBot </div> ''',
                 unsafe_allow_html=True
@@ -89,7 +83,7 @@ class ResearchToolApp:
             messages_container = st.container()
             
             # Get user input
-            user_input = st.chat_input("What's on your mind?")
+            user_input = st.chat_input("Hey Scholar, what are you exploring today ?")
             
             # Process message
             if user_input:
@@ -98,7 +92,7 @@ class ResearchToolApp:
                     "content": user_input
                 })
                 
-                with st.spinner("Thinking..."):
+                with st.spinner("Gathering some scholarly thoughts..."):
                     result = self.chatbot.send_message(
                         st.session_state.chatbot_session_id,
                         user_input,
@@ -163,7 +157,7 @@ class ResearchToolApp:
             
             try:
                 # Agent 1: Engineer prompt
-                progress = self.ui.show_progress("⏳ Preparing your research request...")
+                progress = self.ui.show_progress("🪄 ScholarCraft is channeling your request...")
                 engineered_prompt = self.prompt_agent.run(user_input)
                 
                 if not engineered_prompt:
@@ -171,7 +165,7 @@ class ResearchToolApp:
                     return
                 
                 # Agent 2: Generate research
-                progress.info("⏳ Generating research content...")
+                progress.info("⏳ Compiling your scholarly insights...")
                 st.divider()
                 
                 research_content = self.research_agent.run(engineered_prompt)
@@ -193,7 +187,7 @@ class ResearchToolApp:
                 )
                 
                 # Display results
-                st.markdown("### Step 2: Your Generated Research")
+                st.markdown("### ScholarMind has crafted your findings..")
                 st.divider()
                 
                 self.ui.display_content(research_content)
@@ -218,7 +212,7 @@ class ResearchToolApp:
         # DISPLAY CACHED CONTENT IF IT EXISTS
         # This prevents regeneration when sidebar changes
         elif "last_content" in st.session_state:
-            st.markdown("### Step 2: Your Generated Research")
+            st.markdown("### ScholarMind Has Crafted Your Findings")
             st.divider()
             
             self.ui.display_content(st.session_state.last_content)
@@ -228,7 +222,7 @@ class ResearchToolApp:
             
             st.markdown("""
             ---
-            💡 **Tip:** Ask the chatbot about your content in the sidebar!
+            💡 Tip: Consult ScholarBot in the sidebar for deeper understanding!
             """)
 
 

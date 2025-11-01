@@ -35,7 +35,7 @@ class ResearchAgentChatbot:
         llm = ChatOpenAI(
             api_key=self.api_key,
             model=self.model,
-            temperature=0.7,
+            temperature=0.3,
             base_url="https://openrouter.ai/api/v1"
         )
 
@@ -55,7 +55,7 @@ class ResearchAgentChatbot:
     def _build_system_prompt(self, internal_context: str = None) -> str:
         """Build system prompt with context about Research-Agent"""
         
-        base_prompt = """You are Research Assistant for the Research Content Generator application.
+        base_prompt = """You are Research Assistant for the ScholarMind application.
 
 You help users understand their generated research papers, essays, blog posts, technical reports, literature reviews, case studies, and white papers.
 
