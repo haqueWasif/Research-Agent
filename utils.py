@@ -78,8 +78,8 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
         except Exception as e:
             print(f"Font cache update failed: {e}")
     
-    main_font = "Libertinus Serif"  
-    math_font = "Libertinus Math"  
+    main_font = "DejaVu Serif"  
+    math_font = "DejaVu Sans"
     
     tmp_file = None
     try:
