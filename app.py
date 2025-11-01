@@ -187,7 +187,7 @@ class ResearchToolApp:
                 )
                 
                 # Display results
-                st.markdown("### ScholarMind has crafted your findings..")
+                st.markdown("### ScholarMind Has Crafted Your Findings")
                 st.divider()
                 
                 self.ui.display_content(research_content)
