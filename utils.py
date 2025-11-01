@@ -67,8 +67,10 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
     Handles Greek, Chinese, and math symbols using a Unicode-safe font.
     Uses STIX Two Math font to avoid missing character warnings.
     """
-    main_font = "Libertinus Serif"   
-    math_font = "Libertinus Math"       
+    
+    main_font = "LibertinusSerif"  
+    math_font = "LibertinusMath"   
+     
     
     tmp_file = None
     try:
