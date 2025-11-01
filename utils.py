@@ -65,14 +65,16 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
     """
     Convert Markdown text to a PDF for Streamlit deployment.
     Handles Greek, Chinese, and math symbols using a Unicode-safe font.
+    Uses STIX Two Math font to avoid missing character warnings.
     """
     # Main text font
     main_font = "Noto Serif"
-    # Math symbols font (supports 𝜇, 𝛴, etc.)
-    math_font = "Noto Math"
+    # Math symbols font (STIX Two Math covers all Unicode math symbols)
+    math_font = "STIX Two Math"
 
     tmp_file = None
     try:
+        # Create temporary PDF file
         tmp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
         pdf_path = tmp_file.name
         tmp_file.close()
@@ -90,6 +92,7 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
             ]
         )
 
+        # Read PDF bytes
         with open(pdf_path, "rb") as f:
             pdf_bytes = f.read()
 
@@ -97,9 +100,10 @@ def markdown_to_pdf(markdown_text: str) -> bytes | None:
 
     except Exception as e:
         print(f"[PDF Generation Error] {e}")
-        print("➡️ Make sure XeLaTeX and Noto Math font are installed on your system.")
+        print("➡️ Ensure XeLaTeX is installed and texlive-fonts-extra is available.")
         return None
 
     finally:
+        # Clean up temporary file
         if tmp_file and os.path.exists(pdf_path):
             os.remove(pdf_path)
