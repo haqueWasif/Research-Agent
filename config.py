@@ -6,7 +6,7 @@ class Config:
     """Application configuration"""
     # API Configuration
     OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-    MODEL_NAME = "x-ai/grok-4.1-fast:free"s
+    MODEL_NAME = "x-ai/grok-4.1-fast:free"
     
     # Templates
     TEMPLATE_PATH = "template.json"
