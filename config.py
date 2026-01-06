@@ -47,7 +47,7 @@ class Config:
     ]
 
     # Chatbot Settings
-    CHATBOT_MODEL = "x-ai/grok-4.1-fast:free"
+    CHATBOT_MODEL = "xiaomi/mimo-v2-flash:free"
     CHATBOT_TEMPERATURE = 0.7
     CHATBOT_MAX_HISTORY = 20  # Max messages to keep in session
     
